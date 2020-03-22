@@ -14,6 +14,15 @@ class Item extends CI_Controller {
 	}
 	
 	public function createItem() {
+		$data['jquery_script'] = 'item/create_item.js';
+		$data['links'] = array('toastr/build/toastr.css', 
+								'bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css', 
+								'datatables.net-bs/css/dataTables.bootstrap.min.css');
+								
+		$data['scripts'] = array('toastr/build/toastr.min.js',
+								'datatables.net/js/jquery.dataTables.min.js', 
+								'datatables.net-bs/js/dataTables.bootstrap.min.js');
+								
 		$data['page'] = 'item/create_item';
 		$this->load->view('main_content', $data);
 	}
@@ -27,7 +36,11 @@ class Item extends CI_Controller {
 	public function create_edit_item_auth() {
 		$data = $this->input->post();
 		$this->item_model->create_item($data);
-		redirect(base_url() . 'item/createItem');
+	}
+	
+	public function getAllCreatedItem() {
+		$data = array('data'=>$this->item_model->getAllCreatedItem());
+		echo json_encode($data);
 	}
 	
 	public function itemIn() {
@@ -59,9 +72,8 @@ class Item extends CI_Controller {
 		$this->item_model->item_in($data);
 	}
 		
-	public function getAllitemIn() {
-		$data = array('data'=>$this->item_model->getAllitemIn());
-		// pr($data);
+	public function getAllItemIn() {
+		$data = array('data'=>$this->item_model->getAllItemIn());
 		echo json_encode($data);
 	}
 	

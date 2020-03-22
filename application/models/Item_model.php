@@ -18,6 +18,15 @@ class Item_model extends CI_Model {
 		$this->db->insert('item_in', $data);
 	}
 	
+	public function getAllCreatedItem() {
+		$query = $this->db->select('id, name, alias, notes')
+						->from('item')
+						->order_by('id', 'DESC')
+						->get();
+						
+		return $query->result();
+	}
+	
 	public function getAllItemIn() {
 		$query = $this->db->select('item_in.id, item_in.date, quantity, item.name, item_in.notes')
 						->from('item_in')
