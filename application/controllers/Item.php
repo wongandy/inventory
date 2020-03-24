@@ -14,6 +14,7 @@ class Item extends CI_Controller {
 	}
 	
 	public function createItem() {
+		$data['title'] = 'Create Item';
 		$data['jquery_script'] = 'item/create_item.js';
 		$data['links'] = array('toastr/build/toastr.css', 
 								'bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css', 
@@ -44,6 +45,7 @@ class Item extends CI_Controller {
 	}
 	
 	public function itemIn() {
+		$data['title'] = 'Item In';
 		$data['jquery_script'] = 'item/item_in.js';
 		$data['links'] = array('toastr/build/toastr.css', 
 								'bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css', 
@@ -57,6 +59,7 @@ class Item extends CI_Controller {
 								'datatables.net-bs/js/dataTables.bootstrap.min.js');
 								
 		$data['page'] = 'item/item_in';
+		
 		$all_item_names = $this->item_model->getAllItemNames();
 		
 		foreach ($all_item_names as $item) {
@@ -77,21 +80,60 @@ class Item extends CI_Controller {
 		echo json_encode($data);
 	}
 	
-	// public function getItemName() {
-		// $name = $this->input->get('term');
+	public function getCustomerName() {
+		$name = $this->input->get('term');
+		// $name = 'ore';
+		if ($name) {
+			$items = $this->item_model->getCustomerName($name);
+			
+			foreach ($items as $item) {
+				$result[] = array(
+					"label" => $item->customer
+				);
+			}
+			
+			echo json_encode($result);
+		}
+	}
+	
+	public function itemOut() {
+		$data['title'] = 'Item Out';
+		$data['jquery_script'] = 'item/item_out.js';
+		// $data['jquery_script'] = 'application/views/item/item_out.js';
+		$data['links'] = array('toastr/build/toastr.css', 
+								'bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css', 
+								'select2/dist/css/select2.min.css', 
+								'datatables.net-bs/css/dataTables.bootstrap.min.css');
+								
+		$data['scripts'] = array('toastr/build/toastr.min.js', 
+								'bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js', 
+								'select2/dist/js/select2.full.min.js', 
+								'datatables.net/js/jquery.dataTables.min.js', 
+								'datatables.net-bs/js/dataTables.bootstrap.min.js');
+								
+		$data['page'] = 'item/item_out';
+		$all_item_names = $this->item_model->getAllItemNames();
 		
-		// if ($name) {
-			// $items = $this->item_model->getItemName($name);
-			
-			// foreach ($items as $item) {
-				// $result[] = array(
-					// "label" => $item->name,
-					// "value" => $item->id
-				// );
-			// }
-			
-			// echo json_encode($result);
-		// }
-	// }
-
+		foreach ($all_item_names as $item) {
+			$item_names[$item->id] = $item->name;
+		}
+		
+		$data['item_names'] = $item_names;
+		$this->load->view('main_content', $data);
+	}
+	
+	public function create_edit_item_out_auth() {
+		$data = $this->input->post();
+		$this->item_model->item_out($data);
+	}
+	
+	public function getAllItemOut() {
+		$data = array('data'=>$this->item_model->getAllItemOut());
+		echo json_encode($data);
+	}
+	
+	public function get_remaining_item_quantity() {
+		$item_id = $this->input->post('item_id');
+		echo $this->item_model->get_remaining_item_quantity($item_id);
+	}
 }
