@@ -67,6 +67,78 @@ class Item_model extends CI_Model {
 		
 		// get total remaining of an item
 		$remaining = $total_item_in - $total_item_out;
-		echo $remaining;
+		return $remaining;
+	}
+	
+	public function get_all_item_list() {
+		$query = $this->db->select('id, name')->order_by('name', 'ASC')->get('item');
+		$items = $query->result();
+		
+		foreach ($items as $key => $item) {
+			$items[$key]->remaining = $this->get_remaining_item_quantity($item->id);
+		}
+		
+		return $items;
+	}
+	
+	public function get_all_item_list_for_print() {
+		$query = $this->db->select('id, alias')->get('item');
+		$items = $query->result();
+		
+		foreach ($items as $key => $item) {
+			$items[$key]->remaining = $this->get_remaining_item_quantity($item->id);
+		}
+		
+		return $items;
+	}
+	
+	public function get_item_history($id = '') {
+		$query = $this->db->select('id, item_id, date, customer, quantity AS out, notes')->where('item_id', $id)->order_by('customer', 'asc')->get('item_out');
+		$items_out = $query->result_array();
+		
+		foreach ($items_out as $key => $item_out) {
+			$items_out[$key]['in'] = '';
+			$items_out[$key]['balance'] = '';
+		}
+		
+		$query = $this->db->select('id, item_id, date, quantity AS in, notes')->where('item_id', $id)->get('item_in');
+		$items_in = $query->result_array();
+		
+		foreach ($items_in as $key => $item_in) {
+			$items_in[$key]['out'] = '';
+			$items_in[$key]['customer'] = 'In'; // hardcoded "In" temporarily
+			$items_in[$key]['balance'] = '';
+		}
+		
+		foreach ($items_in as $key => $item_in) {
+			array_push($items_out, $item_in);
+		}
+		
+		// Comparison function 
+		function date_compare($item1, $item2) {
+			$date1 = strtotime($item1['date']); 
+			$date2 = strtotime($item2['date']);
+			return $date1 - $date2; 
+		}  
+		  
+		// Sort the array  
+		usort($items_out, 'date_compare'); 
+		
+		$item_history = $items_out;
+		
+		$balance = 0;
+		
+		foreach ($item_history as $key => $item) {
+			if ($item['in']) {
+				$balance += $item['in'];
+				$item_history[$key]['balance'] = $balance;
+			}
+			elseif ($item['out']) {
+				$balance -= $item['out'];
+				$item_history[$key]['balance'] = $balance;
+			}
+		}
+		
+		return $item_history;
 	}
 }
