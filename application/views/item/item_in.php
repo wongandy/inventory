@@ -26,6 +26,13 @@
 				
 				<div class="form-group">
 					<?php
+					echo form_label('Remaining', 'remaining');
+					echo form_input(array('type'=>'number', 'disabled'=>true, 'class'=>'form-control', 'id'=>'remaining'));
+					?>
+				</div>
+				
+				<div class="form-group">
+					<?php
 					echo form_label('Quantity', 'quantity');
 					echo form_input(array('type'=>'number', 'required'=>true, 'class'=>'form-control', 'id'=>'quantity', 'name'=>'quantity', 'placeholder'=>'e.g. 20'));
 					?>
