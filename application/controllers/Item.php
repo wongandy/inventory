@@ -80,9 +80,25 @@ class Item extends CI_Controller {
 		$this->load->view('main_content', $data);
 	}
 	
-	public function create_edit_item_in_auth() {
+	public function item_in_process() {
 		$data = $this->input->post();
-		$this->item_model->item_in($data);
+		$id = $this->input->post('id');
+		
+		if ($id) {
+			unset($data['id']);
+			$this->item_model->edit_item_in($data, $id);
+		}
+		else {
+			$this->item_model->create_item_in($data);
+		}
+	}
+	
+	public function delete_item_in($id = '') {
+		$this->item_model->delete_item_in($id);
+	}
+	
+	public function delete_item_out($id = '') {
+		$this->item_model->delete_item_out($id);
 	}
 		
 	public function getAllItemIn() {
@@ -131,9 +147,17 @@ class Item extends CI_Controller {
 		$this->load->view('main_content', $data);
 	}
 	
-	public function create_edit_item_out_auth() {
+	public function item_out_process() {
 		$data = $this->input->post();
-		$this->item_model->item_out($data);
+		$id = $this->input->post('id');
+		
+		if ($id) {
+			unset($data['id']);
+			$this->item_model->edit_item_out($data, $id);
+		}
+		else {
+			$this->item_model->create_item_out($data);
+		}
 	}
 	
 	public function getAllItemOut() {
@@ -157,11 +181,17 @@ class Item extends CI_Controller {
 		echo json_encode($data);
 	}
 	
-	// public function test() {
-		// $data = array('data'=>array(array('id'=>1, 'a'=>'andy', 'date'=>"2020-03-26", "customer"=>"Anastasi", "in"=>1000, "balance"=>'100', "notes"=>''),
-									// array('date'=>"2020-03-26", "customer"=>"Store", "in"=>'', "out"=>'30', "balance"=>'70', "notes"=>''),
-									// array('date'=>"2020-03-26", "customer"=>"John & Mae", "in"=>'', "out"=>'50', "balance"=>'20', "notes"=>'')));
-		// pr($data);	
-		// echo json_encode($data);
-	// }
+	public function get_item_out_details($id = '') {
+		$data = $this->item_model->get_item_out_details($id);
+		echo json_encode($data);
+	}
+	
+	public function get_item_in_details($id = '') {
+		$data = $this->item_model->get_item_in_details($id);
+		echo json_encode($data);
+	}
+	
+	public function test() {
+		pr($this->item_model->get_item_out_details(1));
+	}
 }
