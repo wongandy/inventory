@@ -5,7 +5,7 @@
 			  <h3 class="box-title">Item Out</h3>
 			</div>
 			
-			<?php echo form_open(base_url() . 'item/create_edit_item_in_auth', array('id'=>'form_item_out', 'autocomplete'=>'off')); ?>
+			<?php echo form_open(base_url() . 'item/item_out_process', array('id'=>'form_item_out', 'autocomplete'=>'off')); ?>
 			<div class="box-body">
 				<div class="form-group">
 					<?php echo form_label('Date', 'date'); ?>
@@ -53,9 +53,12 @@
 				</div>
 			</div>
 			<div class="box-footer">
-				<button type='submit' class='btn btn-info'>Item Out</button>
+				<button type='submit' class='btn btn-info' id='item_out_button'>Item Out</button>
 			</div>
-			<?php echo form_close(); ?>
+			<?php
+			echo form_input(array('type'=>'hidden', 'name'=>'id', 'id'=>'id'));
+			echo form_close();
+			?>
 		</div>
 	</div>
 	<div class="col-md-8">
@@ -73,6 +76,7 @@
 							<th>Quantity</th>
 							<th>Item</th>
 							<th>Note</th>
+							<th>Action</th>
 						</tr>
 					</thead>
 				</table>

@@ -19,13 +19,24 @@ class Item_model extends CI_Model {
 		return $query->result();
 	}
 	
-	public function item_in($data = array()) {
+	public function create_item_in($data = array()) {
 		$this->db->insert('item_in', $data);
 	}
 	
-	public function item_out($data = array()) {
+	public function edit_item_in($data = array(), $id = '') {
+		$this->db->where('id', $id);
+		$this->db->update('item_in', $data);
+	}
+	
+	public function create_item_out($data = array()) {
 		$this->db->insert('item_out', $data);
 	}
+	
+	public function edit_item_out($data = array(), $id = '') {
+		$this->db->where('id', $id);
+		$this->db->update('item_out', $data);
+	}
+	
 	
 	public function getAllCreatedItem() {
 		$query = $this->db->select('id, name, alias, notes')
@@ -39,30 +50,62 @@ class Item_model extends CI_Model {
 	public function getAllItemIn() {
 		$query = $this->db->select('item_in.id, item_in.date, quantity, item.name, item_in.notes')
 						->from('item_in')
+						->where('active', 1)
 						->join('item', 'item.id = item_in.item_id')
 						->order_by('item_in.id', 'DESC')
 						->get();
-						
+					
+		foreach ($query->result() as $id => $item) {
+			$query->result()[$id]->action = "<button class='btn btn-info edit_item_in' data-id='" . $item->id . "'>Edit</button> 
+											<button class='btn btn-danger delete_item_in' data-id='" . $item->id . "' data-item='" . $item->name . "' data-quantity='" . $item->quantity . "'>Delete</button>";
+		}
+		
 		return $query->result();
 	}
 	
 	public function getAllItemOut() {
 		$query = $this->db->select('item_out.id, item_out.date, item_out.customer, quantity, item.name, item_out.notes')
 						->from('item_out')
+						->where('active', 1)
 						->join('item', 'item.id = item_out.item_id')
 						->order_by('item_out.id', 'DESC')
 						->get();
-						
+		
+		foreach ($query->result() as $id => $item) {
+			$query->result()[$id]->action = "<button class='btn btn-info edit_item_out' data-id='" . $item->id . "'>Edit</button> 
+											<button class='btn btn-danger delete_item_out' data-id='" . $item->id . "' data-item='" . $item->name . "' data-quantity='" . $item->quantity . "'>Delete</button>";
+		}
+		
+		return $query->result();
+	}
+	
+	public function get_item_in_details($id = '') {
+		$query = $this->db->select('item_in.date, item_in.item_id, item_in.id, item.name, item_in.delivered_by, item_in.quantity, item_in.notes')
+							->from('item_in')
+							->join('item', 'item.id = item_in.item_id')
+							->where('item_in.id', $id)
+							->get();
+							
+		return $query->result();
+	}
+	
+	public function get_item_out_details($id = '') {
+		$query = $this->db->select('item_out.date, item_out.item_id, item_out.id, item.name, item_out.customer, item_out.quantity, item_out.notes')
+							->from('item_out')
+							->join('item', 'item.id = item_out.item_id')
+							->where('item_out.id', $id)
+							->get();
+							
 		return $query->result();
 	}
 	
 	public function get_remaining_item_quantity($item_id = '') {
 		// get all item in of an item
-		$query = $this->db->select_sum('quantity', 'item_in')->where('item_id', $item_id)->get('item_in');
+		$query = $this->db->select_sum('quantity', 'item_in')->where(array('item_id'=>$item_id, 'active'=>1))->get('item_in');
 		$total_item_in = $query->row()->item_in;
 		
 		// get all item out of an item
-		$query = $this->db->select_sum('quantity', 'item_out')->where('item_id', $item_id)->get('item_out');
+		$query = $this->db->select_sum('quantity', 'item_out')->where(array('item_id'=>$item_id, 'active'=>1))->get('item_out');
 		$total_item_out = $query->row()->item_out;
 		
 		// get total remaining of an item
@@ -92,8 +135,24 @@ class Item_model extends CI_Model {
 		return $items;
 	}
 	
+	public function delete_item_in($id) {
+		$this->db->set('active', '0');
+		$this->db->where('id', $id);
+		$this->db->update('item_in');
+	}
+	
+	public function delete_item_out($id) {
+		$this->db->set('active', '0');
+		$this->db->where('id', $id);
+		$this->db->update('item_out');
+	}
+	
 	public function get_item_history($id = '') {
-		$query = $this->db->select('id, item_id, date, customer, quantity AS out, notes')->where('item_id', $id)->order_by('customer', 'asc')->get('item_out');
+		$query = $this->db->select('id, item_id, date, customer, quantity AS out, notes')
+							->where(array('item_id'=>$id, 'active'=>1))
+							->order_by('customer', 'asc')
+							->get('item_out');
+							
 		$items_out = $query->result_array();
 		
 		foreach ($items_out as $key => $item_out) {
@@ -101,7 +160,10 @@ class Item_model extends CI_Model {
 			$items_out[$key]['balance'] = '';
 		}
 		
-		$query = $this->db->select('id, item_id, date, quantity AS in, notes')->where('item_id', $id)->get('item_in');
+		$query = $this->db->select('id, item_id, date, quantity AS in, notes')
+							->where(array('item_id'=>$id, 'active'=>1))
+							->get('item_in');
+							
 		$items_in = $query->result_array();
 		
 		foreach ($items_in as $key => $item_in) {

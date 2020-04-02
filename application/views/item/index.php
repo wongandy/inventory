@@ -14,11 +14,10 @@
 						<thead>
 							<tr>
 								<th>Date</th>
-								<th>Customer</th>
+								<th>Details</th>
 								<th>In</th>
 								<th>Out</th>
 								<th>Balance</th>
-								<!--<th>Note</th>-->
 							</tr>
 						</thead>
 					</table>
@@ -30,74 +29,9 @@
 		</div>
 	</div>
 
-	<!--<div class="box-body">
-	<?php
-	$break = 21;
-	$start = 0;
-	$end = $break;
-
-	foreach ($print_items as $key => $item) {
-		if ($key == $start) {
-			echo "<div class='col-xs-2' style='padding-right: 0; padding-left: 0'><table class='table table-bordered'><tr><td style='width: 10px; text-align: right;'>" . $item->remaining . "</td><td>" . $item->alias . "</td></tr>";
-		}
-		else {
-			echo "<tr><td style='width: 10px; text-align: right;'>" . $item->remaining . "</td><td>" . $item->alias . "</td></tr>";
-		}
-		if ($key == $end) {
-			echo "</table></div>";
-			$start = ($end + 1);
-			$end += ($break + 1);
-			
-			if ($end > count($items)) {
-				$end = (count($items)-1);
-			}
-		}
-	}
-	?>
-	</div>-->
 	<div class="box-body">
-		<!--<div class='row'>
-			<div class='col-sm-6'>
-				<table class='table table-bordered'>
-					<thead>
-						<tr>
-							<th>Date</th>
-							<th>Customer</th>
-							<th>In</th>
-							<th>Out</th>
-							<th>Balance</th>
-							<th>Note</th>
-						</tr>
-					</thead>
-					<tbody>
-					<?php
-					$balance = 0;
-					
-					foreach ($test as $key => $item) :
-						$item['customer'] = (isset($item['customer'])) ? $item['customer'] : '';
-						$item['in'] = (isset($item['in'])) ? $item['in'] : '';
-						$item['out'] = (isset($item['out'])) ? $item['out'] : '';
-						$item['notes'] = (isset($item['notes'])) ? $item['notes'] : '';
-						$balance += ($item['in'] - $item['out']);
-					?>
-					<tr>
-						<td><?php echo $item['date']; ?></td>
-						<td><?php echo $item['customer']; ?></td>
-						<td><?php echo $item['in']; ?></td>
-						<td><?php echo $item['out']; ?></td>
-						<td><?php echo ($balance) ? $balance : ''; ?></td>
-						<td><?php echo $item['notes']; ?></td>
-					</tr>
-					<?php
-					endforeach;
-					?>
-					</tbody>
-				</table>
-			</div>
-		</div>-->
-		
 		<?php
-		$break = 18;
+		$break = 28;
 		$start = 0;
 		$end = $break;
 		?>
