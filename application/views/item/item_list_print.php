@@ -15,10 +15,10 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>asset/dist/css/AdminLTE.min.css">
 	<style>
-		
 		.table>tbody>tr>td {
 			padding: 0;
-			line-height: 1.3;
+			line-height: 1.1;
+			font-size: small;
 		}
 		
 		.table>tbody>tr>td.remaining {
@@ -58,7 +58,7 @@
 	?>
 	
 	<?php
-	$break = 21;
+	$break = 27;
 	$start = 0;
 	$end = $break;
 	?>

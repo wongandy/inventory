@@ -125,7 +125,7 @@ class Item_model extends CI_Model {
 	}
 	
 	public function get_all_item_list_for_print() {
-		$query = $this->db->select('id, alias')->get('item');
+		$query = $this->db->select('id, alias')->order_by('sequence', 'ASC')->get('item');
 		$items = $query->result();
 		
 		foreach ($items as $key => $item) {
@@ -133,6 +133,32 @@ class Item_model extends CI_Model {
 		}
 		
 		return $items;
+	}
+	
+	public function get_all_item_list_for_sorting() {
+		$query = $this->db->select('id, alias, sequence')->order_by('sequence', 'ASC')->get('item');
+		$items = $query->result();
+		
+		foreach ($items as $key => $item) {
+			$items[$key]->remaining = $this->get_remaining_item_quantity($item->id);
+		}
+		
+		return $items;
+	}
+	
+	public function database_sort_items($data = array()) {
+		$source_id = $data['source_id'];
+		$source_sequence = $data['source_sequence'];
+		$target_id = $data['target_id'];
+		$target_sequence = $data['target_sequence'];
+
+		$this->db->set('sequence', $target_sequence);
+		$this->db->where('id', $source_id);
+		$this->db->update('item');
+		
+		$this->db->set('sequence', $source_sequence);
+		$this->db->where('id', $target_id);
+		$this->db->update('item');
 	}
 	
 	public function delete_item_in($id) {

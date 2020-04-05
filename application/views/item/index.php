@@ -29,7 +29,7 @@
 		</div>
 	</div>
 
-	<div class="box-body">
+	<div class="box-body table-responsive">
 		<?php
 		$break = 28;
 		$start = 0;
