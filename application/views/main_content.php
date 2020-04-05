@@ -17,8 +17,6 @@
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>asset/dist/css/skins/_all-skins.min.css">
- <!-- Autocomplete -->
-  <link rel="stylesheet" href="<?php echo base_url(); ?>asset/bower_components/jquery-ui/autocomplete/jquery-ui.css">
 	<?php
 	if (isset($links)) {
 		foreach ($links as $link) {
@@ -626,8 +624,6 @@
 	<script src="<?php echo base_url(); ?>asset/dist/js/adminlte.min.js"></script>
 	<!-- AdminLTE for demo purposes -->
 	<script src="<?php echo base_url(); ?>asset/dist/js/demo.js"></script>
-	<!-- autocomplete -->
-	<script src="<?php echo base_url(); ?>asset/bower_components/jquery-ui/autocomplete/jquery-ui.js"></script>
 	<script type="text/javascript">
 	var base_url = "<?php echo base_url(); ?>";
 	</script>
@@ -637,12 +633,7 @@
 			echo "<script src='" . base_url() . "asset/bower_components/" . $script . "'></script>\n";
 		}
 	}
-	
-	// if (isset($jquery_script)) {
-		// echo "<script>";
-		// $this->load->view($jquery_script);
-		// echo "</script>";
-	// }
+
 	?>
 	<?php if (isset($jquery_script)) : ?>
 	<script src='<?php echo base_url() . 'asset/js/' . $jquery_script; ?>'></script>

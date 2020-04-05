@@ -19,8 +19,29 @@ class Item extends CI_Controller {
 		$data['page'] = 'item/index';
 		$data['print_items'] = $this->item_model->get_all_item_list_for_print();
 		$data['items'] = $this->item_model->get_all_item_list();
-		$data['test'] = $this->item_model->get_item_history(1);
 		$this->load->view('main_content', $data);
+	}
+	
+	public function sort_items() {
+		$data['title'] = 'Sort Item List Table';
+		$data['jquery_script'] = 'item/sort_items.js';
+		$data['links'] = array(
+								'jquery-ui-1.12.1.custom/jquery-ui.min.css',
+								'jquery-ui-1.12.1.custom/jquery-ui.structure.min.css',
+								'jquery-ui-1.12.1.custom/jquery-ui.theme.min.css');
+								
+		$data['scripts'] = array(
+								'jquery-ui-1.12.1.custom/jquery-ui.min.js',
+								'datatables.net-bs/js/dataTables.bootstrap.min.js');
+								
+		$data['page'] = 'item/sort_items';
+		$data['items'] = $this->item_model->get_all_item_list_for_sorting();
+		$this->load->view('main_content', $data);
+	}
+	
+	public function database_sort_items() {
+		$data = $this->input->post('data');
+		$this->item_model->database_sort_items($data);
 	}
 	
 	public function createItem() {
@@ -57,12 +78,12 @@ class Item extends CI_Controller {
 	public function itemIn() {
 		$data['title'] = 'Item In';
 		$data['jquery_script'] = 'item/item_in.js';
-		$data['links'] = array('toastr/build/toastr.css', 
+		$data['links'] = array('toastr/build/toastr.css',
 								'bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css', 
 								'select2/dist/css/select2.min.css', 
 								'datatables.net-bs/css/dataTables.bootstrap.min.css');
 								
-		$data['scripts'] = array('toastr/build/toastr.min.js', 
+		$data['scripts'] = array('toastr/build/toastr.min.js',
 								'bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js', 
 								'select2/dist/js/select2.full.min.js', 
 								'datatables.net/js/jquery.dataTables.min.js', 
@@ -125,12 +146,14 @@ class Item extends CI_Controller {
 	public function itemOut() {
 		$data['title'] = 'Item Out';
 		$data['jquery_script'] = 'item/item_out.js';
-		$data['links'] = array('toastr/build/toastr.css', 
+		$data['links'] = array('toastr/build/toastr.css',
+								'jquery-ui/autocomplete/jquery-ui.css',
 								'bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css', 
 								'select2/dist/css/select2.min.css', 
 								'datatables.net-bs/css/dataTables.bootstrap.min.css');
 								
-		$data['scripts'] = array('toastr/build/toastr.min.js', 
+		$data['scripts'] = array('toastr/build/toastr.min.js',
+								'jquery-ui/autocomplete/jquery-ui.js',
 								'bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js', 
 								'select2/dist/js/select2.full.min.js', 
 								'datatables.net/js/jquery.dataTables.min.js', 
@@ -189,9 +212,5 @@ class Item extends CI_Controller {
 	public function get_item_in_details($id = '') {
 		$data = $this->item_model->get_item_in_details($id);
 		echo json_encode($data);
-	}
-	
-	public function test() {
-		pr($this->item_model->get_item_out_details(1));
 	}
 }
