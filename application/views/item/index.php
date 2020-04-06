@@ -42,12 +42,23 @@
 					<td>
 					<table class='table table-bordered table-hover'>
 						<tr class='item_selected' data-toggle="modal" data-target="#myModal" data-id='<?php echo $item->id; ?>' data-name='<?php echo $item->name; ?>'>
-							<td style='width: 10px; text-align: right;'><?php echo $item->remaining; ?></td>
+							<td style='width: 10px; text-align: right;'>
+								<div><?php echo $item->remaining; ?></div>
+								<div class="progress progress-xs">
+									<div class="progress-bar progress-bar-<?php echo $item->status; ?>" style="width: <?php echo $item->percentage; ?>%"></div>
+								</div>
+							</td>
 							<td><?php echo $item->name; ?></td>
+							
 						</tr>
 					<?php else : ?>
 						<tr class='item_selected' data-toggle="modal" data-target="#myModal" data-id='<?php echo $item->id; ?>' data-name='<?php echo $item->name; ?>'>
-							<td style='width: 10px; text-align: right;'><?php echo $item->remaining; ?></td>
+							<td style='width: 10px; text-align: right;'>
+								<div><?php echo $item->remaining; ?></div>
+								<div class="progress progress-xs">
+									<div class="progress-bar progress-bar-<?php echo $item->status; ?>" style="width: <?php echo $item->percentage; ?>%"></div>
+								</div>
+							</td>
 							<td><?php echo $item->name; ?></td>
 						</tr>
 					<?php if ($key == $end) : ?>

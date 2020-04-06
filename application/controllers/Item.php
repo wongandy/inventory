@@ -18,6 +18,9 @@ class Item extends CI_Controller {
 								
 		$data['page'] = 'item/index';
 		$data['print_items'] = $this->item_model->get_all_item_list_for_print();
+		// pr(ceil(0.923555 * 100));
+		// pr(0 / 0);
+		// pr($this->item_model->get_all_item_list());
 		$data['items'] = $this->item_model->get_all_item_list();
 		$this->load->view('main_content', $data);
 	}

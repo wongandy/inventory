@@ -113,11 +113,39 @@ class Item_model extends CI_Model {
 		return $remaining;
 	}
 	
+	public function get_total_item_quantity($item_id = '') {
+		// get all item in of an item
+		$query = $this->db->select_sum('quantity', 'item_in')->where(array('item_id'=>$item_id, 'active'=>1))->get('item_in');
+		$total_item_in = $query->row()->item_in;
+		return $total_item_in;
+	}
+	
 	public function get_all_item_list() {
-		$query = $this->db->select('id, name')->order_by('name', 'ASC')->get('item');
+		$query = $this->db->select('id, name, soft_limit')->order_by('name', 'ASC')->get('item');
 		$items = $query->result();
 		
 		foreach ($items as $key => $item) {
+			if ($this->get_total_item_quantity($item->id) == 0) {
+				$items[$key]->percentage = 0;
+			}
+			else {
+				if (($this->get_total_item_quantity($item->id) > $items[$key]->soft_limit) && $items[$key]->soft_limit != 0) {
+					$items[$key]->percentage = 100;
+				}
+				else {
+					$items[$key]->percentage = ceil($this->get_remaining_item_quantity($item->id) / $this->get_total_item_quantity($item->id) * 100);
+				}
+			}
+			
+			if ($items[$key]->percentage >= 70) {
+				$items[$key]->status = 'success';
+			}
+			elseif ($items[$key]->percentage >= 30 && $items[$key]->percentage < 70) {
+				$items[$key]->status = 'warning';
+			}
+			else {
+				$items[$key]->status = 'danger';
+			}
 			$items[$key]->remaining = $this->get_remaining_item_quantity($item->id);
 		}
 		
@@ -136,7 +164,7 @@ class Item_model extends CI_Model {
 	}
 	
 	public function get_all_item_list_for_sorting() {
-		$query = $this->db->select('id, alias, sequence')->order_by('sequence', 'ASC')->get('item');
+		$query = $this->db->select('id, alias, sequence')->order_by('id', 'ASC')->get('item');
 		$items = $query->result();
 		
 		foreach ($items as $key => $item) {
