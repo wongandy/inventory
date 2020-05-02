@@ -6,40 +6,51 @@ class Item extends CI_Controller {
 		parent::__construct();
 		$this->load->helper('form');
 		$this->load->model('item_model');
+		$this->load->library('session');
 	}
 	
 	public function index() {
-		$data['title'] = 'Item List';
-		$data['jquery_script'] = 'item/index.js';
-		$data['links'] = array('datatables.net-bs/css/dataTables.bootstrap.min.css');
-								
-		$data['scripts'] = array('datatables.net/js/jquery.dataTables.min.js', 
-								'datatables.net-bs/js/dataTables.bootstrap.min.js');
-								
-		$data['page'] = 'item/index';
-		$data['print_items'] = $this->item_model->get_all_item_list_for_print();
-		// pr(ceil(0.923555 * 100));
-		// pr(0 / 0);
-		// pr($this->item_model->get_all_item_list());
-		$data['items'] = $this->item_model->get_all_item_list();
-		$this->load->view('main_content', $data);
+		if ($this->session->userdata('logged_in')) {
+			$data['title'] = 'Item List';
+			$data['jquery_script'] = 'item/index.js';
+			$data['links'] = array('datatables.net-bs/css/dataTables.bootstrap.min.css');
+									
+			$data['scripts'] = array('datatables.net/js/jquery.dataTables.min.js', 
+									'datatables.net-bs/js/dataTables.bootstrap.min.js');
+									
+			$data['page'] = 'item/index';
+			$data['print_items'] = $this->item_model->get_all_item_list_for_print();
+			$data['items'] = $this->item_model->get_all_item_list();
+			$this->load->view('main_content', $data);
+		}
+		else {
+				redirect(base_url() . 'login');
+		}
 	}
 	
 	public function sort_items() {
-		$data['title'] = 'Sort Item List Table';
-		$data['jquery_script'] = 'item/sort_items.js';
-		$data['links'] = array(
-								'jquery-ui-1.12.1.custom/jquery-ui.min.css',
-								'jquery-ui-1.12.1.custom/jquery-ui.structure.min.css',
-								'jquery-ui-1.12.1.custom/jquery-ui.theme.min.css');
-								
-		$data['scripts'] = array(
-								'jquery-ui-1.12.1.custom/jquery-ui.min.js',
-								'datatables.net-bs/js/dataTables.bootstrap.min.js');
-								
-		$data['page'] = 'item/sort_items';
-		$data['items'] = $this->item_model->get_all_item_list_for_sorting();
-		$this->load->view('main_content', $data);
+		if ($this->session->userdata('logged_in') && $this->session->userdata('role_id') == 1) {
+			$data['title'] = 'Sort Item List Table';
+			$data['jquery_script'] = 'item/sort_items.js';
+			$data['links'] = array(
+									'jquery-ui-1.12.1.custom/jquery-ui.min.css',
+									'jquery-ui-1.12.1.custom/jquery-ui.structure.min.css',
+									'jquery-ui-1.12.1.custom/jquery-ui.theme.min.css');
+									
+			$data['scripts'] = array(
+									'jquery-ui-1.12.1.custom/jquery-ui.min.js',
+									'datatables.net-bs/js/dataTables.bootstrap.min.js');
+									
+			$data['page'] = 'item/sort_items';
+			$data['items'] = $this->item_model->get_all_item_list_for_sorting();
+			$this->load->view('main_content', $data);
+		}
+		elseif ($this->session->userdata('logged_in') && $this->session->userdata('role_id') != 1) {
+			redirect(base_url() . 'item');
+		}
+		else {
+			redirect(base_url() . 'login');
+		}
 	}
 	
 	public function database_sort_items() {
@@ -48,25 +59,33 @@ class Item extends CI_Controller {
 	}
 	
 	public function createItem() {
-		$data['title'] = 'Create Item';
-		$data['jquery_script'] = 'item/create_item.js';
-		$data['links'] = array('toastr/build/toastr.css', 
-								'bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css', 
-								'datatables.net-bs/css/dataTables.bootstrap.min.css');
-								
-		$data['scripts'] = array('toastr/build/toastr.min.js',
-								'datatables.net/js/jquery.dataTables.min.js', 
-								'datatables.net-bs/js/dataTables.bootstrap.min.js');
-								
-		$data['page'] = 'item/create_item';
-		$this->load->view('main_content', $data);
+		if ($this->session->userdata('logged_in') && $this->session->userdata('role_id') == 1) {
+			$data['title'] = 'Create Item';
+			$data['jquery_script'] = 'item/create_item.js';
+			$data['links'] = array('toastr/build/toastr.css', 
+									'bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css', 
+									'datatables.net-bs/css/dataTables.bootstrap.min.css');
+									
+			$data['scripts'] = array('toastr/build/toastr.min.js',
+									'datatables.net/js/jquery.dataTables.min.js', 
+									'datatables.net-bs/js/dataTables.bootstrap.min.js');
+									
+			$data['page'] = 'item/create_item';
+			$this->load->view('main_content', $data);
+		}
+		elseif ($this->session->userdata('logged_in') && $this->session->userdata('role_id') != 1) {
+			redirect(base_url() . 'item');
+		}
+		else {
+			redirect(base_url() . 'login');
+		}
 	}
 	
-	public function editItem() {
-		$data['id'] = '';
-		$data['page'] = 'item/create_item';
-		$this->load->view('main_content', $data);
-	}
+	// public function editItem() {
+		// $data['id'] = '';
+		// $data['page'] = 'item/create_item';
+		// $this->load->view('main_content', $data);
+	// }
 	
 	public function create_edit_item_auth() {
 		$data = $this->input->post();
@@ -79,29 +98,37 @@ class Item extends CI_Controller {
 	}
 	
 	public function itemIn() {
-		$data['title'] = 'Item In';
-		$data['jquery_script'] = 'item/item_in.js';
-		$data['links'] = array('toastr/build/toastr.css',
-								'bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css', 
-								'select2/dist/css/select2.min.css', 
-								'datatables.net-bs/css/dataTables.bootstrap.min.css');
-								
-		$data['scripts'] = array('toastr/build/toastr.min.js',
-								'bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js', 
-								'select2/dist/js/select2.full.min.js', 
-								'datatables.net/js/jquery.dataTables.min.js', 
-								'datatables.net-bs/js/dataTables.bootstrap.min.js');
-								
-		$data['page'] = 'item/item_in';
-		
-		$all_item_names = $this->item_model->getAllItemNames();
-		
-		foreach ($all_item_names as $item) {
-			$item_names[$item->id] = $item->name;
+		if ($this->session->userdata('logged_in') && $this->session->userdata('role_id') == 1) {
+			$data['title'] = 'Item In';
+			$data['jquery_script'] = 'item/item_in.js';
+			$data['links'] = array('toastr/build/toastr.css',
+									'bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css', 
+									'select2/dist/css/select2.min.css', 
+									'datatables.net-bs/css/dataTables.bootstrap.min.css');
+									
+			$data['scripts'] = array('toastr/build/toastr.min.js',
+									'bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js', 
+									'select2/dist/js/select2.full.min.js', 
+									'datatables.net/js/jquery.dataTables.min.js', 
+									'datatables.net-bs/js/dataTables.bootstrap.min.js');
+									
+			$data['page'] = 'item/item_in';
+			
+			$all_item_names = $this->item_model->getAllItemNames();
+			
+			foreach ($all_item_names as $item) {
+				$item_names[$item->id] = $item->name;
+			}
+			
+			$data['item_names'] = $item_names;
+			$this->load->view('main_content', $data);
 		}
-		
-		$data['item_names'] = $item_names;
-		$this->load->view('main_content', $data);
+		elseif ($this->session->userdata('logged_in') && $this->session->userdata('role_id') != 1) {
+			redirect(base_url() . 'item');
+		}
+		else {
+				redirect(base_url() . 'login');
+		}
 	}
 	
 	public function item_in_process() {
@@ -147,30 +174,38 @@ class Item extends CI_Controller {
 	}
 	
 	public function itemOut() {
-		$data['title'] = 'Item Out';
-		$data['jquery_script'] = 'item/item_out.js';
-		$data['links'] = array('toastr/build/toastr.css',
-								'jquery-ui/autocomplete/jquery-ui.css',
-								'bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css', 
-								'select2/dist/css/select2.min.css', 
-								'datatables.net-bs/css/dataTables.bootstrap.min.css');
-								
-		$data['scripts'] = array('toastr/build/toastr.min.js',
-								'jquery-ui/autocomplete/jquery-ui.js',
-								'bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js', 
-								'select2/dist/js/select2.full.min.js', 
-								'datatables.net/js/jquery.dataTables.min.js', 
-								'datatables.net-bs/js/dataTables.bootstrap.min.js');
-								
-		$data['page'] = 'item/item_out';
-		$all_item_names = $this->item_model->getAllItemNames();
-		
-		foreach ($all_item_names as $item) {
-			$item_names[$item->id] = $item->name;
+		if ($this->session->userdata('logged_in') && $this->session->userdata('role_id') == 1) {
+			$data['title'] = 'Item Out';
+			$data['jquery_script'] = 'item/item_out.js';
+			$data['links'] = array('toastr/build/toastr.css',
+									'jquery-ui/autocomplete/jquery-ui.css',
+									'bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css', 
+									'select2/dist/css/select2.min.css', 
+									'datatables.net-bs/css/dataTables.bootstrap.min.css');
+									
+			$data['scripts'] = array('toastr/build/toastr.min.js',
+									'jquery-ui/autocomplete/jquery-ui.js',
+									'bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js', 
+									'select2/dist/js/select2.full.min.js', 
+									'datatables.net/js/jquery.dataTables.min.js', 
+									'datatables.net-bs/js/dataTables.bootstrap.min.js');
+									
+			$data['page'] = 'item/item_out';
+			$all_item_names = $this->item_model->getAllItemNames();
+			
+			foreach ($all_item_names as $item) {
+				$item_names[$item->id] = $item->name;
+			}
+			
+			$data['item_names'] = $item_names;
+			$this->load->view('main_content', $data);
 		}
-		
-		$data['item_names'] = $item_names;
-		$this->load->view('main_content', $data);
+		elseif ($this->session->userdata('logged_in') && $this->session->userdata('role_id') != 1) {
+			redirect(base_url() . 'item');
+		}
+		else {
+				redirect(base_url() . 'login');
+		}
 	}
 	
 	public function item_out_process() {
@@ -215,5 +250,14 @@ class Item extends CI_Controller {
 	public function get_item_in_details($id = '') {
 		$data = $this->item_model->get_item_in_details($id);
 		echo json_encode($data);
+	}
+	
+	public function barcode() {
+		include(APPPATH.'third_party/php-barcode-generator/src/BarcodeGenerator.php');
+		include(APPPATH.'third_party/php-barcode-generator/src/BarcodeGeneratorHTML.php');
+		$data['items'] = $this->item_model->get_all_item_for_barcode();
+		$data['generatorHTML'] = new Picqer\Barcode\BarcodeGeneratorHTML();
+		$data['page'] = 'item/barcode';
+		$this->load->view('main_content', $data);
 	}
 }
