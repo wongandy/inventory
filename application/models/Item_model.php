@@ -152,6 +152,12 @@ class Item_model extends CI_Model {
 		return $items;
 	}
 	
+	public function get_all_item_for_barcode() {
+		$query = $this->db->select('id, name')->order_by('name', 'ASC')->get('item');
+		$items = $query->result();
+		return $items;
+	}
+	
 	public function get_all_item_list_for_print() {
 		$query = $this->db->select('id, alias')->order_by('sequence', 'ASC')->get('item');
 		$items = $query->result();
