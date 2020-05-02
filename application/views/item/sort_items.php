@@ -36,11 +36,11 @@
 				<?php if ($key == $start) : ?>
 				<td>
 					<table class='table table-bordered table-hover'>
-						<tr class='external-event' ondrop="drop(event)" ondragover="allowDrop(event)">
+						<tr ondrop="drop(event)" ondragover="allowDrop(event)">
 							<td id='<?php echo $item->id; ?>' data-id='<?php echo $item->id; ?>' data-sequence='<?php echo $item->sequence; ?>' draggable=true ondragstart='drag(event)'><?php echo $item->remaining . ' ' . $item->alias; ?></td>
 						</tr>
 					<?php else : ?>
-						<tr class='external-event' ondrop="drop(event)" ondragover="allowDrop(event)">
+						<tr ondrop="drop(event)" ondragover="allowDrop(event)">
 							<td id='<?php echo $item->id; ?>' data-id='<?php echo $item->id; ?>' data-sequence='<?php echo $item->sequence; ?>' draggable=true ondragstart='drag(event)'><?php echo $item->remaining . ' ' . $item->alias; ?></td>
 						</tr>
 					<?php if ($key == $end) : ?>
