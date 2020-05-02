@@ -170,7 +170,7 @@ class Item_model extends CI_Model {
 	}
 	
 	public function get_all_item_list_for_sorting() {
-		$query = $this->db->select('id, alias, sequence')->order_by('id', 'ASC')->get('item');
+		$query = $this->db->select('id, alias, sequence')->order_by('sequence', 'ASC')->get('item');
 		$items = $query->result();
 		
 		foreach ($items as $key => $item) {
