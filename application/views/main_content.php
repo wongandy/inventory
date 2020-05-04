@@ -173,7 +173,7 @@
 
 	?>
 	<?php if (isset($jquery_script)) : ?>
-	<script src='<?php echo base_url() . 'asset/js/' . $jquery_script; ?>'></script>
+	<script src='<?php echo base_url() . 'public/js/' . $jquery_script; ?>'></script>
 	<?php endif; ?>
 </body>
 </html>
