@@ -17,7 +17,7 @@ $(document).ready(function () {
 				"<'row'<'col-sm-12'tr>>" +
 				"<'row'<'col-sm-5'l><'col-sm-7'p>>",
 			columns: [
-				{ data: 'date' },
+				{ data: 'datetime' },
 				{ data: 'customer' },
 				{ data: 'in' },
 				{ data: 'out' },

@@ -81,12 +81,6 @@ class Item extends CI_Controller {
 		}
 	}
 	
-	// public function editItem() {
-		// $data['id'] = '';
-		// $data['page'] = 'item/create_item';
-		// $this->load->view('main_content', $data);
-	// }
-	
 	public function create_edit_item_auth() {
 		$data = $this->input->post();
 		$this->item_model->create_item($data);
