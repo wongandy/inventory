@@ -129,11 +129,16 @@ class Item_model extends CI_Model {
 				$items[$key]->percentage = 0;
 			}
 			else {
-				if (($this->get_total_item_quantity($item->id) > $items[$key]->soft_limit) && $items[$key]->soft_limit != 0) {
+				if (($this->get_remaining_item_quantity($item->id) > $items[$key]->soft_limit) && $items[$key]->soft_limit != 0) {
 					$items[$key]->percentage = 100;
 				}
 				else {
-					$items[$key]->percentage = ceil($this->get_remaining_item_quantity($item->id) / $this->get_total_item_quantity($item->id) * 100);
+					if ($items[$key]->soft_limit != 0) {
+						$items[$key]->percentage = ceil($this->get_remaining_item_quantity($item->id) / $items[$key]->soft_limit * 100);
+					}
+					else {
+						$items[$key]->percentage = ceil($this->get_remaining_item_quantity($item->id) / $this->get_total_item_quantity($item->id) * 100);
+					}
 				}
 			}
 			
@@ -148,7 +153,7 @@ class Item_model extends CI_Model {
 			}
 			$items[$key]->remaining = $this->get_remaining_item_quantity($item->id);
 		}
-		
+		// pr($items);
 		return $items;
 	}
 	
@@ -208,7 +213,7 @@ class Item_model extends CI_Model {
 	}
 	
 	public function get_item_history($id = '') {
-		$query = $this->db->select('id, item_id, date, customer, quantity AS out, notes')
+		$query = $this->db->select('id, item_id, date, customer, quantity AS out, notes, datetime')
 							->where(array('item_id'=>$id, 'active'=>1))
 							->order_by('customer', 'asc')
 							->get('item_out');
@@ -220,7 +225,7 @@ class Item_model extends CI_Model {
 			$items_out[$key]['balance'] = '';
 		}
 		
-		$query = $this->db->select('id, item_id, date, quantity AS in, notes')
+		$query = $this->db->select('id, item_id, date, quantity AS in, notes, datetime')
 							->where(array('item_id'=>$id, 'active'=>1))
 							->get('item_in');
 							
@@ -238,8 +243,8 @@ class Item_model extends CI_Model {
 		
 		// Comparison function 
 		function date_compare($item1, $item2) {
-			$date1 = strtotime($item1['date']); 
-			$date2 = strtotime($item2['date']);
+			$date1 = strtotime($item1['datetime']); 
+			$date2 = strtotime($item2['datetime']);
 			return $date1 - $date2; 
 		}  
 		  

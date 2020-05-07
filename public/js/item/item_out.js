@@ -15,10 +15,10 @@ $(document).ready(function () {
 			success: function(data) {
 				$('#remaining').val(data);
 				
-				// if (parseInt($('#quantity').val()) > parseInt($('#remaining').val())) {
-					// alert('Quantity must not be more than remaining value');
-					// $('#quantity').val('');
-				// }
+				if (parseInt($('#quantity').val()) > parseInt($('#remaining').val())) {
+					alert('Quantity must not be more than remaining value');
+					$('#quantity').val('');
+				}
 			}
 		});
 	}
@@ -31,7 +31,7 @@ $(document).ready(function () {
 		get_remaining_item_quantity(item_id);
 		var remaining = $('#remaining').val();
 		
-		if (parseInt($('#quantity').val()) > parseInt($remaining)) {
+		if (parseInt($('#quantity').val()) > parseInt(remaining)) {
 			alert('Quantity must not be more than remaining value');
 			$('#quantity').val('');
 		}
@@ -40,7 +40,7 @@ $(document).ready(function () {
 	$('#quantity').on('keyup', function() {
 		var remaining = $('#remaining').val();
 		
-		if (parseInt($(this).val()) > parseInt($remaining)) {
+		if (parseInt($(this).val()) > parseInt(remaining)) {
 			alert('Quantity must not be more than remaining value');
 			$(this).val('');
 		}
@@ -88,8 +88,28 @@ $(document).ready(function () {
 		return `${year}-${month}-${day}`;
 	}
 	
+	function currentTime() {
+		let date = new Date();
+		let	hour = date.getHours();
+		let	minutes = date.getMinutes();
+		let	seconds = date.getSeconds();
+
+		if (hour.toString().length < 2) {
+			hour = '0' + hour;
+		}
+		
+		if (minutes.toString().length < 2) {
+			minutes = '0' + minutes;
+		}
+		
+		if (seconds.toString().length < 2) {
+			seconds = '0' + seconds;
+		}
+
+		return `${hour}:${minutes}:${seconds}`;
+	}
+	
 	function form_default() {
-		$('#date').val(currentDate());
 		$('#customer').focus();
 		$('#quantity').val('');
 		$('#notes').val('');
@@ -100,6 +120,7 @@ $(document).ready(function () {
 	
 	$("#form_item_out").submit(function(e){
 		e.preventDefault();
+		$('#datetime').val($('#date').val() + ' ' + currentTime());
 		var form_data = $(this).serialize();
 		
 		// get the item name of item

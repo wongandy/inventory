@@ -57,6 +57,7 @@
 			</div>
 			<?php
 			echo form_input(array('type'=>'hidden', 'name'=>'id', 'id'=>'id'));
+			echo form_input(array('type'=>'hidden', 'name'=>'datetime', 'id'=>'datetime'));
 			echo form_close();
 			?>
 		</div>
@@ -67,7 +68,7 @@
 			  <h3 class="box-title">Item Out History</h3>
 			</div>
 			
-			<div class="box-body">
+			<div class="box-body table-responsive">
 				<table id="item_out_table" class="table table-bordered table-hover" style="width:100%">
 					<thead>
 						<tr>

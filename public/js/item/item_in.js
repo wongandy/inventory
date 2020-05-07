@@ -63,6 +63,27 @@ $(document).ready(function () {
 		return `${year}-${month}-${day}`;
 	}
 	
+	function currentTime() {
+		let date = new Date();
+		let	hour = date.getHours();
+		let	minutes = date.getMinutes();
+		let	seconds = date.getSeconds();
+
+		if (hour.toString().length < 2) {
+			hour = '0' + hour;
+		}
+		
+		if (minutes.toString().length < 2) {
+			minutes = '0' + minutes;
+		}
+		
+		if (seconds.toString().length < 2) {
+			seconds = '0' + seconds;
+		}
+
+		return `${hour}:${minutes}:${seconds}`;
+	}
+	
 	function form_default() {
 		$('#date').val(currentDate());
 		$('#item_id').select2('focus');
@@ -75,6 +96,7 @@ $(document).ready(function () {
 	
 	$("#form_item_in").submit(function(e){
 		e.preventDefault();
+		$('#datetime').val($('#date').val() + ' ' + currentTime());
 		var form_data = $(this).serialize();
 		
 		// get the item name of item
