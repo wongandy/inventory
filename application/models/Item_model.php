@@ -223,6 +223,7 @@ class Item_model extends CI_Model {
 		foreach ($items_out as $key => $item_out) {
 			$items_out[$key]['in'] = '';
 			$items_out[$key]['balance'] = '';
+			$items_out[$key]['notes'] = $item_out['notes'];
 		}
 		
 		$query = $this->db->select('id, item_id, date, quantity AS in, notes, datetime')
@@ -235,6 +236,7 @@ class Item_model extends CI_Model {
 			$items_in[$key]['out'] = '';
 			$items_in[$key]['customer'] = 'In'; // hardcoded "In" temporarily
 			$items_in[$key]['balance'] = '';
+			$items_in[$key]['notes'] = $item_in['notes'];
 		}
 		
 		foreach ($items_in as $key => $item_in) {
