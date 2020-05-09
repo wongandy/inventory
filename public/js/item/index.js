@@ -17,11 +17,12 @@ $(document).ready(function () {
 				"<'row'<'col-sm-12'tr>>" +
 				"<'row'<'col-sm-5'l><'col-sm-7'p>>",
 			columns: [
-				{ data: 'datetime' },
+				{ data: 'date' },
 				{ data: 'customer' },
 				{ data: 'in' },
 				{ data: 'out' },
-				{ data: 'balance' }
+				{ data: 'balance' },
+				{ data: 'notes' }
 			],
 			initComplete: function(){
                 this.api().page('last').draw('page')

@@ -34,18 +34,11 @@
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition skin-purple sidebar-mini sidebar-collapse">
+<body class="hold-transition skin-purple sidebar-mini sidebar-collapse fixed">
 <!-- Site wrapper -->
 <div class="wrapper">
 
   <header class="main-header">
-    <!-- Logo -->
-    <a href="<?php echo base_url() . 'asset/pages'; ?>/<?php echo base_url() . 'asset/pages'; ?>/index2.html" class="logo">
-      <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>A</b>LT</span>
-      <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Admin</b>LTE</span>
-    </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
       <!-- Sidebar toggle button-->
